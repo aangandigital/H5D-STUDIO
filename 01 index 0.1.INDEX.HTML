@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H5D STUDIO - Fifth Dimension Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Times roman, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: #ffffff;
+        }
+
+        .logo span {
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 300;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #0a0a0a;
+        }
+
+        #canvas3d {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 6rem;
+            font-weight: 100;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s ease;
+            letter-spacing: 10px;
+        }
+
+        .hero h1 span {
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            color: #ffffff;
+            font-weight: 300;
+            letter-spacing: 3px;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .cta-button {
+            padding: 1.2rem 3rem;
+            font-size: 0.9rem;
+            border: 2px solid #667eea;
+            background: transparent;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.4s;
+            animation: fadeInUp 1s ease 0.4s backwards;
+            letter-spacing: 2px;
+            font-weight: 300;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: #667eea;
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 8rem 5%;
+            background: #0f0f0f;
+        }
+
+        .projects h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 200;
+            letter-spacing: 5px;
+        }
+
+        .projects .subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 4rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .project-card {
+            background: #1a1a1a;
+            border-radius: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+            transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+
+        .project-card:hover::before {
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translate(-50%, -50%); }
+            50% { transform: translate(50%, 50%); }
+            100% { transform: translate(-50%, -50%); }
+        }
+
+        .project-info {
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s;
+        }
+
+        .project-card:hover .project-info {
+            color: #ffffff;
+        }
+
+        .project-info h3 {
+            margin-bottom: 0.8rem;
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .project-info p {
+            color: #999;
+            font-weight: 300;
+            line-height: 1.6;
+            transition: color 0.3s;
+        }
+
+        .project-card:hover .project-info p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* About Section */
+        .about {
+            padding: 8rem 5%;
+            background: #0a0a0a;
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-content {
+            flex: 1;
+        }
+
+        .about-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            font-weight: 200;
+            letter-spacing: 5px;
+            color: #ffffff;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: #cccccc;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .dimension-list {
+            margin-top: 2rem;
+            list-style: none;
+        }
+
+        .dimension-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: #cccccc;
+        }
+
+        .dimension-list strong {
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .about-visual {
+            flex: 1;
+            height: 500px;
+            background: rgba(26, 26, 26, 0.5);
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 8rem 5%;
+            background: #0f0f0f;
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 200;
+            letter-spacing: 5px;
+        }
+
+        .contact .subtitle {
+            color: #999;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .contact form {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact input,
+        .contact textarea {
+            padding: 1.2rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 300;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .contact input:focus,
+        .contact textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #1f1f1f;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .contact button {
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: #ffffff;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.4s;
+            letter-spacing: 2px;
+            font-weight: 300;
+        }
+
+        .contact button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: #1a1a1a;
+            color: #ffffff;
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating orbs */
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.1));
+            opacity: 0.6;
+            animation: floatOrb 25s infinite ease-in-out;
+            box-shadow: 0 0 60px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(150px, -120px) scale(1.1); }
+            66% { transform: translate(-100px, -180px) scale(0.9); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">H<span>5D</span> STUDIO</div>
+        <ul class="nav-links">
+            <li><a href="#home">HOME</a></li>
+            <li><a href="#projects">WORK</a></li>
+            <li><a href="#about">PHILOSOPHY</a></li>
+            <li><a href="#contact">CONNECT</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <canvas id="canvas3d"></canvas>
+        
+        <!-- Floating orbs -->
+        <div class="floating-orb" style="width: 400px; height: 400px; top: 5%; left: 5%;"></div>
+        <div class="floating-orb" style="width: 300px; height: 300px; top: 50%; right: 10%; animation-delay: -8s;"></div>
+        <div class="floating-orb" style="width: 250px; height: 250px; bottom: 5%; left: 40%; animation-delay: -15s;"></div>
+        
+        <div class="hero-content">
+            <h1>H<span>5D</span> STUDIO</h1>
+            <p>FIFTH DIMENSION ARCHITECTURE</p>
+            <button class="cta-button">DISCOVER MORE</button>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <h2>PORTFOLIO</h2>
+        <p class="subtitle">Selected Works</p>
+        <div class="project-grid">
+            <div class="project-card">
+                <div class="project-image">🏢</div>
+                <div class="project-info">
+                    <h3>URBAN RESIDENCY</h3>
+                    <p>A harmonious blend of contemporary design and sustainable living in the heart of the city.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🏛️</div>
+                <div class="project-info">
+                    <h3>CORPORATE TOWER</h3>
+                    <p>Redefining workspace dynamics through innovative architectural solutions and spatial design.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🏘️</div>
+                <div class="project-info">
+                    <h3>ECO HABITAT</h3>
+                    <p>Pioneering sustainable architecture that respects nature while embracing modern aesthetics.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🏠</div>
+                <div class="project-info">
+                    <h3>VILLA MODERNA</h3>
+                    <p>Luxury redefined through minimalist design and seamless indoor-outdoor integration.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🏗️</div>
+                <div class="project-info">
+                    <h3>CULTURAL CENTER</h3>
+                    <p>A landmark destination celebrating art, culture, and community through bold architecture.</p>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image">🌆</div>
+                <div class="project-info">
+                    <h3>SKYLINE COMPLEX</h3>
+                    <p>Transforming the urban landscape with innovative mixed-use development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <h2>OUR PHILOSOPHY</h2>
+            <p>At H5D STUDIO, we transcend traditional architectural boundaries. Our design philosophy is rooted in the concept of five dimensions—each adding depth and meaning to every space we create.</p>
+            
+            <ul class="dimension-list">
+                <li><strong>1D • LINE:</strong> Direction and movement through space</li>
+                <li><strong>2D • PLANE:</strong> Surface and materiality</li>
+                <li><strong>3D • VOLUME:</strong> Physical form and structure</li>
+                <li><strong>4D • TIME:</strong> Evolution and experience over time</li>
+                <li><strong>5D • EMOTION:</strong> The soul of space—how it makes you feel</li>
+            </ul>
+            
+            <p style="margin-top: 2rem;">We believe that truly exceptional architecture engages all five dimensions, creating spaces that are not just built, but felt.</p>
+        </div>
+        <div class="about-visual">
+            <canvas id="aboutCanvas"></canvas>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+    <h2>LET'S CREATE</h2>
+    <p class="subtitle">Together we can build something extraordinary</p>
+
+    <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Email Address" required>
+        <input type="tel" placeholder="Phone Number" required>
+        <input type="text" placeholder="Project Type">
+        <textarea rows="6" placeholder="Share your vision with us..." required></textarea>
+        <button type="submit">SEND MESSAGE</button>
+    </form>
+</section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 H5D STUDIO • Fifth Dimension Architecture • All Rights Reserved</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // 3D Canvas Scene - Different geometry style
+        const canvas = document.getElementById('canvas3d');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 8;
+
+        // Create icosahedron instead of torus
+        const geometry = new THREE.IcosahedronGeometry(2, 1);
+        const material = new THREE.MeshStandardMaterial({ 
+            color: 0x667eea,
+            wireframe: true,
+            opacity: 0.8,
+            transparent: true
+        });
+        const icosahedron = new THREE.Mesh(geometry, material);
+        scene.add(icosahedron);
+
+        // Add sphere particles
+        const sphereGeo = new THREE.SphereGeometry(0.1, 8, 8);
+        const sphereMat = new THREE.MeshStandardMaterial({ 
+            color: 0x764ba2,
+            emissive: 0x764ba2,
+            emissiveIntensity: 0.5
+        });
+        
+        const spheres = [];
+        for(let i = 0; i < 30; i++) {
+            const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+            const radius = 4 + Math.random() * 3;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.random() * Math.PI;
+            
+            sphere.position.x = radius * Math.sin(phi) * Math.cos(theta);
+            sphere.position.y = radius * Math.sin(phi) * Math.sin(theta);
+            sphere.position.z = radius * Math.cos(phi);
+            
+            scene.add(sphere);
+            spheres.push({
+                mesh: sphere,
+                speed: 0.0005 + Math.random() * 0.001
+            });
+        }
+
+        // Lighting
+        const pointLight = new THREE.PointLight(0xffffff, 1.5);
+        pointLight.position.set(5, 5, 5);
+        scene.add(pointLight);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        // Mouse movement
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            icosahedron.rotation.x += 0.002;
+            icosahedron.rotation.y += 0.003;
+            
+            // Smooth camera movement
+            targetX += (mouseX * 2 - targetX) * 0.05;
+            targetY += (mouseY * 2 - targetY) * 0.05;
+            
+            camera.position.x = targetX;
+            camera.position.y = targetY;
+            camera.lookAt(scene.position);
+            
+            // Rotate spheres around center
+            spheres.forEach(({mesh, speed}) => {
+                const pos = mesh.position;
+                const angle = speed;
+                const x = pos.x * Math.cos(angle) - pos.z * Math.sin(angle);
+                const z = pos.x * Math.sin(angle) + pos.z * Math.cos(angle);
+                mesh.position.x = x;
+                mesh.position.z = z;
+            });
+            
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // About section canvas - Wave pattern
+        const aboutCanvas = document.getElementById('aboutCanvas');
+        const ctx = aboutCanvas.getContext('2d');
+        aboutCanvas.width = aboutCanvas.offsetWidth;
+        aboutCanvas.height = aboutCanvas.offsetHeight;
+
+        let time = 0;
+        
+        function drawWaves() {
+            ctx.clearRect(0, 0, aboutCanvas.width, aboutCanvas.height);
+            
+            time += 0.02;
+            
+            for(let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(102, 126, 234, ${0.4 - i * 0.06})`;
+                ctx.lineWidth = 2;
+                
+                for(let x = 0; x < aboutCanvas.width; x++) {
+                    const y = aboutCanvas.height / 2 + 
+                              Math.sin(x * 0.01 + time + i * 0.5) * 30 +
+                              Math.sin(x * 0.02 + time * 0.5) * 20;
+                    
+                    if(x === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                
+                ctx.stroke();
+            }
+            
+            requestAnimationFrame(drawWaves);
+        }
+        
+        drawWaves();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            aboutCanvas.width = aboutCanvas.offsetWidth;
+            aboutCanvas.height = aboutCanvas.offsetHeight;
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your interest! We will contact you soon.');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
